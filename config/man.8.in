@@ -1,0 +1,66 @@
+'\" -*- coding: utf-8 -*-
+.TH @PROGRAM_NAME@ 28 "Nov 2017" "Version @PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@" "System Manager's Manual"
+.SH NAME
+@PROJECT_TARGET@ \- fetch SSH keys from LDAP
+.SH SYNOPSIS
+\fB@PROJECT_TARGET@\fR [\fIoptions\fR] \fIusername\fR
+.SH DESCRIPTION
+\fB@PROGRAM_NAME@\fR is a small, configurable utility that will do a simple
+LDAP query to retrieve a stored SSH key (typically stored in the \fIsshPublicKey\fR
+attribute) for an SSH server to use to authenticate the user \fIusername\fR.
+.PP
+Typically this utility would be automatically invoked by the SSH
+server by setting the SSH server to use \fB@PROGRAM_NAME@\fR as its
+\fIAuthorizedKeysCommand\fR (see \fBsshd_config\fR(5)).
+.PP
+\fB@PROGRAM_NAME@\fR is configured through a configuration file
+(see \fB@CONFIG_FILE@\fR(5)).
+.PP
+See the included README for information on configuring the LDAP server.
+.SH OPTIONS
+\fB@PROGRAM_NAME@\fR accepts the following options:
+.TP
+\fB\-\-config\fR \fIFILE\fR, \fB\-\-conf\fR\ \fIFILE\fR, \fB\-c\fR \fIFILE\fR
+Loads the alternate configuration file \fIFILE\fR.
+.TP
+\fB\-\-debug\fR, \fB\-\-dbg\fR, \fB\-d\fR
+Enable debugging mode.
+\fB@PROGRAM_NAME@\fR will send verbose debugging messages to stderr.
+\fB@PROGRAM_NAME@\fR will otherwise handle connections as usual.
+.RS
+This is functionally equivalent to setting \fIlog stdio\fR and \fIloglevel debug\fR
+in the configuration file. This option is for debugging purposes only.
+.RE
+.TP
+\fB\-\-help\fR, \fB\-\-version\fR, \fB\-h\fR, \fB\-v\fR, \fB\-?\fR
+Display version information and help to stdout, then exit.
+.TP
+These options are not case-sensitive.
+.SH FILES
+\fI@CONFIG_PATH@/@CONFIG_FILE@\fR - the configuration file
+(see \fB@CONFIG_FILE@\fR(5))
+.SH OUTPUT
+\fB@PROGRAM_NAME@\fR will only ever output the result attribute value to stdout (except when run with a variant of \fB\-\-help\fR, see above).
+If a variant of \fB\-\-debug\fR is specified, or if \fIlog stdio\fR is set, \fB@PROGRAM_NAME@\fR will output those messages to stderr.
+.SH "EXIT STATUS"
+One of the following exit values will be returned:
+.TP
+0 (EXIT_SUCCESS)
+Successful program execution.
+.TP
+1 (EXIT_FAILURE)
+The operation failed or the command arguments were not valid.
+.PP
+.SH AUTHOR
+\fB@PROGRAM_NAME@\fR is written by Matt Schultz of QuantuMatriX Technologies <\fImatt@qmxtech.com\fR>.
+.PP
+The \fB@PROGRAM_NAME@\fR project can be found at <\fI@PROJECT_URL@\fR>.
+.SH BUGS
+Please report bugs at <\fI@BUG_URL@\fR>.
+.SH "SEE ALSO"
+\fB@CONFIG_FILE@\fR(5), \fBsshd_config\fR(5)
+.SH COPYRIGHT
+Copyright (C) 2017 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
+.RS 0
+This program is released under the terms of the GNU Lesser General Public License, version 3 or later.
+.RE

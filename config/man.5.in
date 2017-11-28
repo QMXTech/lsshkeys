@@ -1,0 +1,240 @@
+'\" -*- coding: utf-8 -*-
+.TH @CONFIG_FILE@ 28 "Nov 2017" "Version @PROJECT_VERSION_MAJOR@.@PROJECT_VERSION_MINOR@.@PROJECT_VERSION_PATCH@" "System Manager's Manual"
+.SH NAME
+@CONFIG_FILE@ \- configuration file for @PROGRAM_NAME@.
+.SH DESCRIPTION
+The file \fI@CONFIG_FILE@\fR contains the configuration information for running \fB@PROJECT_TARGET@\fR (see \fB@PROJECT_TARGET@\fR(8)).
+The file contains configuration options, one per line, defining the method to fetch a single attribute (typically \fIsshPublicKey\fR) from an LDAP directory.
+.SH OPTIONS
+.SS "LOG OPTIONS"
+.TP
+\fBlog\fR \fISCHEME\fR | \fIFILE\fR
+This option controls the way logging is done.
+Either a \fISCHEME\fR or a \fIFILE\fR may be specified.
+\fISCHEME\fR can be specified as one of the following keywords:
+.RS
+.TP
+.B syslog
+Log to syslog. This is the default setting.
+.TP
+.B stderr
+Log to stderr.
+.RE
+.IP
+\fIFILE\fR must be a path to a logfile
+If \fIFILE\fR does not exist, \fIFILE\fR will be created.
+If \fIFILE\fR already exists, \fIFILE\fR will be appended to.
+If \fB@PROGRAM_NAME@\fR is unable to write to \fIFILE\fR or the path to \fIFILE\fR does not exist, \fB@PROGRAM_NAME@\fR will critically error.
+.IP
+This value is optional.
+.TP
+\fBloglevel\fR \fILEVEL\fR
+This option controls the minimum level of the messages to log.
+\fILEVEL\fR can be specified as one of the following keywords:
+.RS
+.TP
+.B critical | crit
+Only log critical error messages.
+.TP
+.B error | err
+Log error messages and above. 
+\fBNOTE:\fR any error message actually logged is critical, so using this \fBloglevel\fR will have the same effect as setting \fILEVEL\fR to \fBcritical\fR.
+.TP
+.B warning | warn
+Log warning messages and above.
+.TP
+.B notice
+Log notice messages and above. This is the default setting.
+.TP
+.B information | info
+Log information messages and above.
+.TP
+.B debug
+Log debug messages and above.
+.RE
+.IP
+This value is optional.
+.SS "CONNECTION OPTIONS"
+.TP
+\fBuri\fR \fIURI\fR
+This option specifies the LDAP URI of the server to connect to.
+The URI scheme must be one of ldap, ldapi or ldaps, specifying LDAP over TCP, ICP or SSL respectively (if supported by the LDAP library).
+.IP
+This value is \fBmandatory\fR.
+.TP
+\fBldap_version\fR \fIVERSION\fR
+This option specifies the version of the LDAP protocol to use.
+Valid values are \fB2\fR and \fB3\fR.
+If \fIVERSION\fR is set to \fB2\fR, a notice message will be logged on each request.
+The default value is \fB3\fR.
+.IP
+This value is optional.
+.TP
+\fBbinddn\fR \fIDN\fR
+This option specifies the distinguished name (DN) with which to bind to the LDAP server for search.
+The default is to bind anonymously.
+.IP
+This value is optional.
+.TP
+\fBbindpw\fR \fIPASSWORD\fR
+This option specifies the credentials with which to bind to the LDAP server for search.
+This option is only applicable when used with \fBbinddn\fR above.
+.IP
+This value is optional.
+.SS "SEARCH OPTIONS"
+.TP
+\fBbase\fR \fIDN\fR
+This option specifies the distinguished name (DN) to use as the base for searches.
+.IP
+This value is \fBmandatory\fR.
+.TP
+\fBfilter\fR \fIFILTER\fR
+This option specifies the LDAP filter to use for searches. 
+\fI%1\fR must represent the username passed as an argument to \fB@PROGRAM_NAME@\fR in this filter.
+The default is \fI(cn=%1)\fR
+.IP
+This value is optional.
+.TP
+\fBscope\fR \fISCOPE\fR
+This option specifies the search scope.
+\fISCOPE\fR can be specified as one of the following keywords:
+.RS
+.TP
+.B onelevel | one
+Search all entries in the first level below the search base distinguished name (DN). This is the default setting.
+.TP
+.B subtree | sub
+Search the entire subtree below the search base distinguished name (DN) including the base entry itself.
+.RE
+.IP
+This value is optional.
+.TP
+\fBattribute\fR \fIATTRIBUTE\fR
+This option specifies the attribute whose value should be sent to stdout as the result.
+This default is \fIsshPublicKey\fR.
+.IP
+This value is optional.
+.SS "TIMING OPTIONS"
+.TP
+\fBtimelimit\fR \fISECONDS\fR
+This option specifies the number of seconds to wait for a response from the server.
+The default is unlimited.
+.IP
+This value is optional.
+.TP
+\fBbind_timelimit\fR \fISECONDS\fR
+This option specifies the number of seconds to allow for a bind operation to the server.
+This option is OpenLDAP specific.
+The default is unlimited.
+.IP
+This value is optional.
+.TP
+\fBidle_timelimit\fR \fISECONDS\fR
+This option specifies the number of seconds after which the connection to the LDAP server will be closed.
+This option is OpenLDAP specific.
+The default is unlimited.
+.IP
+This value is optional.
+.SS "SSL/TLS OPTIONS"
+.TP
+\fBtls_cacertdir\fR \fIPATH\fR
+This option specifies the directory containing X.509 certificates for peer authentication.
+.IP
+This value is optional.
+.TP
+\fBtls_cacertfile\fR \fIPATH\fR
+This option specifies the path to the X.509 certificate for peer authentication.
+This option is ignored when using GnuTLS.
+.IP
+This value is optional.
+.TP
+\fBtls_cert\fR \fIPATH\fR
+This option specifies the path to the file containing the local certificate for client TLS authentication.
+.IP
+This value is optional.
+.TP
+\fBtls_key\fR \fIPATH\fR
+This option specifies the path to the file containing the local private key for client TLS authentication.
+.IP
+This value is optional.
+.TP
+\fBtls_randfile\fR \fIPATH\fR
+This option specifies the path to an entropy source (for instance: /dev/urandom).
+This option is ignored when using GnuTLS older than version 2.2 or Mozilla NSS.
+.IP
+This value is optional.
+.TP
+\fBtls_dhfile\fR \fIPATH\fR
+This option specifies the path of the file containing the parameters for Diffie-Hellman ephemeral key exchange.
+This option is ignored when using GnuTLS or Mozilla NSS.
+.IP
+This value is optional.
+.TP
+\fBtls_ciphers\fR \fICIPHERS\fR
+This option specifies the allowed cipher suite to use for TLS.
+See your TLS implementation's documentation for further information.
+.IP
+This value is optional.
+.TP
+\fBtls_reqcert\fR \fILEVEL\fR
+This option specifies what checks to perform on a server-supplied certificate.
+At least one of \fBtls_cacertdir\fR or \fBtls_cacertfile\fR is required for peer verification.
+\fILEVEL\fR can be specified as one of the following keywords:
+.RS
+.TP
+.B never
+The client will not request or check any server certificate.
+.TP
+.B allow
+The server certificate is requested.
+If no certificate is provided, the session proceeds normally.
+If a bad certificate is provided, it will be ignored and the session proceeds normally.
+.TP
+.B try
+The server certificate is requested.
+If no certificate is provided, the session proceeds normally.
+If a bad certificate is provided, the session is immediately terminated.
+.TP
+.B demand | hard
+These keywords are equivalent.
+The server certificate is requested.
+If no certificate is provided, or a bad certificate is provided, the session is immediately terminated.
+This is the default setting.
+.RE
+.IP
+This value is optional.
+.TP
+\fBtls_crlcheck\fR \fILEVEL\fR
+This option specifies if the Certificate Revocation List (CRL) of the CA should be used to verify if the server certificates have been revoked.
+This requires \fBtls_cacertdir\fR to be set.
+This parameter is ignored when using GnuTLS and Mozilla NSS.
+\fILEVEL\fR can be specified as one of the following keywords:
+.RS
+.TP
+.B none
+Do not perform a CRL check.
+.TP
+.B peer
+Check the CRL of the peer certificate.
+.TP
+.B all
+Check the CRL for the whole certificate chain.
+.RE
+.IP
+This value is optional.
+.TP
+\fBstart_tls\fR \fIon\fR | \fIoff\fR
+This option specifies whether to use StartTLS.
+.IP
+This value is optional.
+.SH AUTHOR
+\fB@PROGRAM_NAME@\fR is written by Matt Schultz of QuantuMatriX Technologies <\fImatt@qmxtech.com\fR>.
+.PP
+The \fB@PROGRAM_NAME@\fR project can be found at <\fIhttps://git.qmx-software.com/open-source/lsshkeys\fR>.
+.SH "SEE ALSO"
+\fB@PROJECT_TARGET@\fR(8)
+.SH COPYRIGHT
+Copyright (C) 2017 QuantuMatriX Software, a QuantuMatriX Technologies Cooperative Partnership.
+.RS 0
+This program is released under the terms of the GNU Lesser General Public License, version 3 or later.
+.RE

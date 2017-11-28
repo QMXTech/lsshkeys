@@ -1,0 +1,6 @@
+Add SASL and Kerberos/GSSAPI support as demand presents itself.
+Add support for LDAP references as demand presents itself.
+Add support to use DNS:SRV to fetch uri as demand presents itself.
+Better internationalization support as demand presents itself.
+Add package build scripts to repository (ongoing) (arch, debian, gentoo, nixos, redhat, opkg [openwrt/openembedded], homebrew and macports were brought in; add others including BSD variants) as demand presents itself
+Eliminate access() system call if possible (this introduces a setuid-only security hole; this is low priority: binary should never be run with setuid anyway).

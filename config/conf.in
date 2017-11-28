@@ -1,0 +1,329 @@
+# This is the configuration file for @PROGRAM_NAME@. See @CONFIG_FILE@(5)
+# for more information.
+
+# The strategy used for options in the default @CONFIG_FILE@ shipped with
+# @PROGRAM_NAME@ is to give a description for each option and specify
+# options with their default value where possible and an example value
+# when the default cannot be set manually, but leave them commented.
+# Uncommented options override the default value. If a value is
+# mandatory, a default example value is given that is left uncommented.
+
+# LOG OPTIONS
+# These options control how @PROGRAM_NAME@ logs messages.
+
+# log SCHEME | FILE
+#
+# This option controls the way logging is done. Either a SCHEME or a FILE
+# may be specified.
+#
+# SCHEME can be specified as one of the following keywords:
+#   syslog : Log to syslog. This is the default setting.
+#   stderr : Log to stderr.
+#
+# FILE must be a path to a logfile If FILE does not exist, FILE will be
+# created. If FILE already exists, FILE will be appended to. If 
+# @PROGRAM_NAME@ is unable to write to FILE or the path to FILE does not 
+# exist, @PROGRAM_NAME@ will critically error.
+#
+# file usage example:
+# log /var/log/@PROJECT_TARGET@.log
+#
+# This value is optional.
+#
+# default:
+#log syslog
+
+# loglevel LEVEL
+#
+# This option controls the minimum level of the messages to log.
+#
+# LEVEL can be specified as one of the following keywords:
+#   critical    | crit : Only log critical error messages.
+#   error       | err  : Log error messages and above. NOTE: any error
+#                        message actually logged is critical, so using
+#                        this loglevel will have the same effect as 
+#                        setting LEVEL to critical.
+#   warning     | warn : Log warning messages and above.
+#   notice             : Log notice messages and above. This is the 
+#                        default setting.
+#   information | info : Log information messages and above.
+#   debug              : Log debug messages and above.
+#
+# This value is optional.
+#
+# default:
+#loglevel notice
+
+# CONNECTION OPTIONS
+# These options control how @PROGRAM_NAME@ connects to the LDAP server.
+
+# uri URI
+#
+# This option specifies the LDAP URI of the server to connect to. The URI
+# scheme must be one of ldap, ldapi or ldaps, specifying LDAP over TCP,
+# ICP or SSL respectively (if supported by the LDAP library).
+#
+# ICP example:
+# uri ldapi:///
+#
+# TCP (and STARTTLS) example:
+# uri ldap://ldap.example.net
+#
+# SSL example:
+# uri ldaps://ldap.example.net
+#
+# This value is MANDATORY.
+#
+# default example:
+uri ldap://ldap.example.net
+
+# ldap_version VERSION
+#
+# This option specifies the version of the LDAP protocol to use. Valid
+# values are 2 and 3. If VERSION is set to 2, a notice message will be 
+# logged on each request.
+#
+# The default value is 3
+#
+# This value is optional.
+#
+# default:
+#ldap_version 3
+
+# binddn DN
+#
+# This option specifies the distinguished name (DN) with which to bind to
+# the LDAP server for search. The default is to bind anonymously.
+#
+# This value is optional.
+#
+# example:
+#binddn cn=person,ou=users,dc=example,dc=net
+
+# bindpw PASSWORD
+#
+# This option specifies the credentials with which to bind to the LDAP
+# server for search. This option is only applicable when used with binddn
+# above.
+#
+# This value is optional.
+#
+# example:
+#bindpw REDACTED
+
+# SEARCH OPTIONS
+# These options control how @PROGRAM_NAME@ searches the LDAP server.
+
+# base DN
+#
+# This option specifies the distinguished name (DN) to use as the base
+# for searches.
+#
+# This value is MANDATORY.
+#
+# default example:
+base ou=users,dc=example,dc=net
+
+# filter FILTER
+#
+# This option specifies the LDAP filter to use for searches. %1 must
+# represent the username passed as an argument to @PROGRAM_NAME@ in this
+# filter.
+#
+# The default value is (cn=%1)
+#
+# This value is optional.
+#
+# default:
+#filter (cn=%1)
+
+# scope SCOPE
+#
+# This option specifies the search scope.
+#
+# SCOPE can be specified as one of the following keywords:
+#   onelevel | one : Search all entries in the first level below the 
+#                    search base distinguished name (DN). This is the
+#                    default setting.
+#   subtree  | sub : Search the entire subtree below the search base 
+#                    distinguished name (DN) including the base entry
+#                    itself.
+#
+# This value is optional.
+#
+# default:
+#scope onelevel
+
+# attribute ATTRIBUTE
+#
+# This option specifies the attribute whose value should be sent to
+# stdout as the result. The default is sshPublicKey.
+#
+# This value is optional.
+#
+# default:
+#attribute sshPublicKey
+
+# TIMING OPTIONS
+# These options control the timing limits @PROGRAM_NAME@ sets on the LDAP
+# library.
+
+# timelimit SECONDS
+#
+# This option specifies the number of seconds to wait for a response from
+# the server. The default is unlimited.
+#
+# This value is optional.
+#
+# example:
+#timelimit 30
+
+# bind_timelimit SECONDS
+#
+# This option specifies the number of seconds to allow for a bind
+# operation to the server. This option is OpenLDAP specific. The default
+# is unlimited.
+#
+# This value is optional.
+#
+# example:
+#bind_timelimit 30
+
+# idle_timelimit SECONDS
+#
+# This option specifies the number of seconds after which the connection
+# to the LDAP server will be closed. This option is OpenLDAP specific. 
+# The default is unlimited.
+#
+# This value is optional.
+#
+# example:
+#idle_timelimit 30
+
+# SSL/TLS OPTIONS
+# These options control the SSL/TLS settings for @PROGRAM_NAME@.
+
+# tls_cacertdir PATH
+#
+# This option specifies the directory containing X.509 certificates for 
+# peer authentication.
+#
+# This value is optional.
+#
+# example:
+#tls_cacertdir /etc/ssl/certs
+
+# tls_cacertfile PATH
+#
+# This option specifies the path to the X.509 certificate for peer 
+# authentication. This option is ignored when using GnuTLS.
+#
+# This value is optional.
+#
+# example:
+#tls_cacertfile /etc/ssl/ldap/cacert.pem
+
+# tls_cert PATH
+#
+# This option specifies the path to the file containing the local
+# certificate for client TLS authentication.
+#
+# This value is optional.
+#
+# example:
+#tls_cert /etc/ssl/ldap/@PROJECT_TARGET@.pem
+
+# tls_key PATH
+#
+# This option specifies the path to the file containing the local private
+# key for client TLS authentication.
+#
+# This value is optional.
+#
+# example:
+#tls_cert /etc/ssl/ldap/private/@PROJECT_TARGET@-key.pem
+
+# tls_randfile PATH
+#
+# This option specifies the path to an entropy source (for instance: 
+# /dev/urandom). This option is ignored when using GnuTLS older than
+# version 2.2 or Mozilla NSS. The default is /dev/urandom.
+#
+# This value is optional.
+#
+# default:
+#tls_randfile /dev/urandom
+
+# tls_dhfile PATH
+#
+# This option specifies the path of the file containing the parameters
+# for Diffie-Hellman ephemeral key exchange. This option is ignored when
+# using GnuTLS or Mozilla NSS.
+#
+# This value is optional.
+#
+# example:
+#tls_dhfile /etc/ssl/ldap/dh.pem
+
+# tls_ciphers CIPHERS
+#
+# This option specifies the allowed cipher suite to use for TLS. See 
+# your TLS implementation's documentation for further information.
+#
+# This value is optional.
+#
+# example:
+#tls_ciphers HIGH:MEDIUM:+SSLv2
+
+# tls_reqcert LEVEL
+#
+# This option specifies what checks to perform on a server-supplied
+# certificate. At least one of tls_cacertdir or tls_cacertfile is 
+# required for peer verification.
+#
+# LEVEL can be specified as one of the following keywords:
+#   never         : The client will not request or check any server
+#                   certificate.
+#   allow         : The server certificate is requested. If no
+#                   certificate is provided, the session proceeds
+#                   normally. If a bad certificate is provided, it will
+#                   be ignored and the session proceeds normally.
+#   try           : The server certificate is requested. If no
+#                   certificate is provided, the session proceeds
+#                   normally. If a bad certificate is provided, the
+#                   session is immediately terminated.
+#   demand | hard : These keywords are equivalent. The server certificate
+#                   is requested. If no certificate is provided, or a bad
+#                   certificate is provided, the session is immediately
+#                   terminated. This is the default setting.
+#
+# This value is optional.
+#
+# default:
+#tls_reqcert demand
+
+# tls_crlcheck LEVEL
+#
+# This option specifies if the Certificate Revocation List (CRL) of the
+# CA should be used to verify if the server certificates have been
+# revoked. This requires tls_cacertdir to be set. This parameter is
+# ignored when using GnuTLS and Mozilla NSS.
+#
+# LEVEL can be specified as one of the following keywords:
+#   none : Do not perform a CRL check.
+#   peer : Check the CRL of the peer certificate.
+#   all  : Check the CRL for the whole certificate chain.
+#
+# This value is optional.
+#
+# example:
+#tls_crlcheck all
+
+# start_tls on | off
+#
+# This option specifies whether to use StartTLS. The default is off.
+#
+# This value is optional.
+#
+# default:
+#start_tls off
